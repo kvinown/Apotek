@@ -32,20 +32,20 @@ class PurchaseController extends Controller
     {
         $user_id = auth()->user()->id;
 
-        $validatedData = validator(
-            $request->all(),
-            [
-                'user_id' => $user_id,
-                'purchase_id' => 'required|string|max:50|unique:purchasing,purchase_id',
-                'date' => 'required|date',
-                'address' => 'required|string|max:255',
-                'status_order' => 'required|integer',
-                'total_purchase' => 'required|integer',
-                'total_payment' => 'required|integer',
-            ]
-        )->validate();
+        $validatedData = $request->validate([
+            'purchase_id' => 'required|string|max:50|unique:purchasing,purchase_id',
+            'date' => 'required|date',
+            'address' => 'required|string|max:255',
+            'status_order' => 'required|integer',
+            'total_purchase' => 'required|integer',
+            'total_payment' => 'required|integer',
+        ]);
+
+        $validatedData['user_id'] = $user_id;
+
         $purchase = new Purchase($validatedData);
         $purchase->save();
+
         $name = $validatedData['purchase_id'];
         $success = "Data Purchase ID $name berhasil ditambah";
         $failed = "Data Purchase ID $name gagal ditambah";
@@ -56,6 +56,7 @@ class PurchaseController extends Controller
             return redirect(route('purchase.index'))->with('failed', $failed);
         }
     }
+
 
     /**
      * Display the specified resource.
