@@ -16,6 +16,16 @@ return new class extends Migration
             $table->string('role_name', 255);
             $table->timestamps();
         });
+
+        \Illuminate\Support\Facades\DB::table('role')->insert([
+            [
+                'role_id' => '01',
+                'role_name' => 'admin',
+            ],[
+                'role_id' => '02',
+                'role_name' => 'user',
+            ]
+        ]);
     }
 
     /**
